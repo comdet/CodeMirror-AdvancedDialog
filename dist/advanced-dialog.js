@@ -23,10 +23,14 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             // Assuming it's a detached DOM element.
             el.appendChild(template);
         }
-        var panel = cm.addPanel(el, {
+        let cmEl = document.body.getElementsByClassName('CodeMirror');
+        if(cmEl && cmEl[0]){
+            cmEl[0].appendChild(el);
+        }
+        /*var panel = cm.addPanel(el, {
             position: bottom ? "bottom" : "top"
-        });
-        return panel;
+        });*/
+        return el;
     };
 
     var closePanel = function closePanel(cm) {
@@ -35,9 +39,9 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             return;
         }
 
-        state.current.panel.clear();
+        state.current.panel.remove();
 
-        if (state.current.onClose) state.current.onClose(state.current.panel.node);
+        if (state.current.onClose) state.current.onClose(state.current.panel);
         delete state.current;
         cm.focus();
     };
@@ -61,8 +65,8 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             onClose: options.onClose
         };
 
-        var inputs = panel.node.getElementsByTagName("input");
-        var buttons = panel.node.getElementsByTagName("button");
+        var inputs = panel.getElementsByTagName("input");
+        var buttons = panel.getElementsByTagName("button");
         if (inputs && inputs.length > 0 && options.inputBehaviours) {
             var _loop = function _loop(i) {
                 var behaviour = options.inputBehaviours[i];
